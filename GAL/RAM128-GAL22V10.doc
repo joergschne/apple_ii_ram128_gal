@@ -5,11 +5,11 @@
 
 CUPL(WM)        5.0a Serial# 60008009
 Device          g22v10  Library DLIB-h-40-1
-Created         Fri Feb 28 20:33:56 2025
+Created         Sun Mar 02 14:57:17 2025
 Name            RAM128-GAL22V10
 Partno          GAL22V10B
-Revision        01
-Date            27.02.2025
+Revision        01 - working final
+Date            02.03.2025
 Designer        JoSch
 Company         None
 Assembly        None

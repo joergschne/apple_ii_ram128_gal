@@ -1,0 +1,43 @@
+CSIM(WM): CUPL Simulation Program
+Version 5.0a Serial# 
+Copyright (c) 1983, 1998 Logical Devices, Inc.
+CREATED Sun Mar 02 14:57:23 2025
+
+LISTING FOR SIMULATION FILE: RAM128-GAL22V10.si
+
+   1: Name     RAM128-GAL22V10;
+   2: PartNo   GAL22V10B;
+   3: Date     02.03.2025;
+   4: Revision 01 - working final;
+   5: Designer JoSch;
+   6: Company  None;
+   7: Assembly None;
+   8: Location None;
+   9: Device   g22v10;
+  10: 
+  11: /*
+  12: * Order:  define order, polarity, and output
+  13: * spacing of stimulus and response values
+  14: */
+  15: 
+  16: ORDER: DEVSEL, A0, A1, A2, A3, RA14, RA15, RA16, DMA; 
+  17: 
+  18: 
+
+==================
+      D           
+      E           
+      V    RRR    
+      S    AAAD   
+      EAAAA111M   
+      L0123456A   
+==================
+0001: C0010LLL1
+0002: C1010HLL1
+0003: C1010HLL0
+0004: C0110LHL0
+0005: C0011LLH0
+0006: C1100LLH0
+0007: C1001LLH0
+0008: C0000LLH0
+0009: C0000LLH1

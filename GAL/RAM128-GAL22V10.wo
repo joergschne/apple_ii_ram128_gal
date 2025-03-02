@@ -1,0 +1,28 @@
+#WAVEFORM
+#H Name     RAM128-GAL22V10;
+#H PartNo   GAL22V10B;
+#H Date     02.03.2025;
+#H Revision 01 - working final;
+#H Designer JoSch;
+#H Company  None;
+#H Assembly None;
+#H Location None;
+#H Device   g22v10;
+#H 
+#H /*
+#H * Order:  define order, polarity, and output
+#H * spacing of stimulus and response values
+#H */
+#H 
+#H ORDER: DEVSEL, A0, A1, A2, A3, RA14, RA15, RA16, DMA; 
+#H 
+#H 
+#V 0001 C0010LLL1
+#V 0002 C1010HLL1
+#V 0003 C1010HLL0
+#V 0004 C0110LHL0
+#V 0005 C0011LLH0
+#V 0006 C1100LLH0
+#V 0007 C1001LLH0
+#V 0008 C0000LLH0
+#V 0009 C0000LLH1
