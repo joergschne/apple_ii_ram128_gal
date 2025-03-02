@@ -32,3 +32,4 @@ fp-info-cache
 
 # Apple hidden files
 ._*
+.DS_Store
