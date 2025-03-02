@@ -1,0 +1,131 @@
+%SIGNAL
+PIN   2 =  A0 
+PIN   3 =  A1 
+PIN   4 =  A2 
+PIN   5 =  A3 
+PIN   6 =  A12 
+PIN   7 =  A13 
+PIN   8 =  A14 
+PIN   9 =  A15 
+PIN  21 =  BFLAG 
+PIN   1 = !DEVSEL 
+PIN  13 = !DMA 
+PIN  17 =  PFLAG 
+PIN  11 =  PHI0 
+PIN  14 =  RA12 
+PIN  20 =  RA14 
+PIN  19 =  RA15 
+PIN  18 =  RA16 
+PIN  22 =  RFLAG 
+PIN  15 = !ROE 
+PIN  10 =  RW 
+PIN  16 = !RWE 
+PIN  23 =  WFLAG 
+%END
+
+%FIELD
+%END
+
+%EQUATION
+BFLAG.d  =>
+    A2 & !BFLAG
+  # !A2 & A3
+
+BFLAG.ar PFLAG.ar RA14.ar RA15.ar RA16.ar RFLAG.ar WFLAG.ar  =>
+    0 
+
+BFLAG.sp PFLAG.sp RA14.sp RA15.sp RA16.sp RFLAG.sp WFLAG.sp  =>
+    0 
+
+PFLAG.d  =>
+    A2 & !PFLAG
+  # A0 & !A2
+
+PFLAG.ar  =>
+    
+PFLAG.sp  =>
+    
+RA12 =>
+    !A13 & !BFLAG
+  # A12 & A13
+
+RA14.d  =>
+    A0 & A2
+  # !A2 & !RA14
+
+RA14.ar  =>
+    
+RA14.sp  =>
+    
+RA15.d  =>
+    A1 & A2
+  # !A2 & !RA15
+
+RA15.ar  =>
+    
+RA15.sp  =>
+    
+RA16.d  =>
+    A2 & A3
+  # !A2 & !RA16
+
+RA16.ar  =>
+    
+RA16.sp  =>
+    
+RFLAG.d  =>
+    A2 & !RFLAG
+  # !A0 & !A1 & !A2
+  # A0 & A1 & !A2
+
+RFLAG.ar  =>
+    
+RFLAG.sp  =>
+    
+ROE =>
+    A12 & A14 & A15 & PHI0 & !RFLAG & RW
+  # A13 & A14 & A15 & PHI0 & !RFLAG & RW
+
+RWE =>
+    A12 & A14 & A15 & PHI0 & !RW & !WFLAG
+  # A13 & A14 & A15 & PHI0 & !RW & !WFLAG
+
+WFLAG.d  =>
+    A2 & !WFLAG
+  # A0 & !A2 & !PFLAG
+
+WFLAG.ar  =>
+    
+WFLAG.sp  =>
+    
+BFLAG.oe  =>
+    1 
+
+PFLAG.oe  =>
+    1 
+
+RA12.oe  =>
+    1 
+
+RA14.oe  =>
+    1 
+
+RA15.oe  =>
+    1 
+
+RA16.oe  =>
+    1 
+
+RFLAG.oe  =>
+    1 
+
+ROE.oe  =>
+    1 
+
+RWE.oe  =>
+    1 
+
+WFLAG.oe  =>
+    1 
+
+%END

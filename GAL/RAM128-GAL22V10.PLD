@@ -1,0 +1,187 @@
+Name            RAM128-GAL22V10;
+Partno          GAL22V10B;
+Revision        01;
+Date            27.02.2025;
+Designer        JoSch;
+Company         None;
+Location        None;
+Assembly        None;
+Device          g22v10;
+
+
+/**
+                    Chip Diagram
+                  -------- --------
+                 |        -        |
+      /DEVSEL x--| 1  CLK       24 |--x VCC
+           A0 x--| 2  I      IO 23 |--x READ-LED         
+           A1 x--| 3  I      IO 22 |--x WRITE-LED         
+           A2 x--| 4  I      IO 21 |--x (AB)BANK-LED         
+           A3 x--| 5  I      IO 20 |--x RAM A14         
+          A12 x--| 6  I      IO 19 |--x RAM A15         
+          A13 x--| 7  I      IO 18 |--x RAM A16         
+          A14 x--| 8  I      IO 17 |--x PRE WRITE FLAG         
+          A15 x--| 9  I      IO 16 |--x RAM /WE         
+          R/W x--| 10 I      IO 15 |--x RAM /OE         
+         PHI0 x--| 11 I      IO 14 |--x RAM A12         
+          GND x--| 12         I 13 |--x /DMA         
+                 |    GAL 22V10    |
+                  -----------------
+**/
+
+
+/** Inputs **/
+Pin 1 = !DEVSEL                 ; /* Clock signal - d-latch out mode */
+Pin [2..5] = [A0..A3]           ; /* Flag selection                  */
+Pin [6..9] = [A12..A15]         ; /* Address block selection         */
+Pin 10 = RW                     ; /* Read /Write request             */
+Pin 11 = PHI0                   ; /* Main clock from CPU             */
+Pin 13 = !DMA                   ; /* DMA access - disable all!       */
+
+
+/** Outputs **/
+Pin 14 = RA12                   ; /* (A12 = (AB)bank 4k selector)    */
+Pin 15 = !ROE                   ; /* RAM read enable                 */
+Pin 16 = !RWE                   ; /* RAM write enable                */
+Pin 17 = PFLAG                  ; /* pre write flag                  */ 
+Pin 18 = RA16                   ; /* 16k block selection             */
+Pin 19 = RA15                   ; /* 16k block selection             */
+Pin 20 = RA14                   ; /* 16k block selection             */
+Pin 21 = BFLAG                  ; /* RAM card (AB)bank selection flag*/
+Pin 22 = RFLAG                  ; /* RAM card read enable flag       */
+Pin 23 = WFLAG                  ; /* RAM card write enable flag      */
+
+
+/** Boolean equation segment  **/
+/** !=NOT  &=AND  #=OR  $=XOR **/
+[PFLAG, RA16, RA15, RA14, BFLAG, RFLAG, WFLAG].ar = 'b'0;
+[PFLAG, RA16, RA15, RA14, BFLAG, RFLAG, WFLAG].sp = 'b'0;
+
+
+/** if A2 - RAM bank selection (registered) **/
+RA14.d = 	( A2 & A0 ) #
+		( !A2 & RA14 );
+
+RA15.d = 	( A2 & A1 ) #
+		( !A2 & RA15 );
+
+RA16.d = 	( A2 & A3 ) #
+		( !A2 & RA16 );
+
+
+/** if !A2 contitional flag selection (registered) **/
+BFLAG.d = 	( A2 & BFLAG ) #
+		( !A2 & A3 );
+
+PFLAG.d = 	( A2 & PFLAG ) #
+		( !A2 & A0 );
+
+RFLAG.d =	( A2 & RFLAG ) #
+		( !A2 & !A0 & !A1 ) #
+		( !A2 & A0 & A1 );
+
+WFLAG.d = 	( A2 & WFLAG ) #
+		( !A2 & A0 & PFLAG );
+
+
+/** Combinational (unregistered) **/
+RA12 = 	( !A13 & BFLAG ) #
+		( A13 & A12 );
+
+ROE =		( PHI0 & A15 & A14 & A12 & RFLAG & RW ) # 
+		( PHI0 & A15 & A14 & A13 & RFLAG & RW ); 
+
+RWE =		( PHI0 & A15 & A14 & A12 & WFLAG & !RW ) # 
+		( PHI0 & A15 & A14 & A13 & WFLAG & !RW ); 
+
+
+/** end **/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+;---------------------------------- PIN Declarations ---------------
+NODE 1          GLOBAL                                           ;       
+PIN  1          /DEVSEL                                          ;       
+PIN  2          PHI1                                             ;       
+PIN  3          A0                                               ;       
+PIN  4          A1                                               ;       
+PIN  5          A2                                               ;       
+PIN  6          A3                                               ;       
+PIN  7          A12                                              ;       
+PIN  8          A13                                              ;       
+PIN  9          A14                                              ;       
+PIN  10         A15                                              ;       
+PIN  11         /WE                                              ;       
+PIN  13         /RES                                             ;       
+PIN  14         RA16                                  REGISTERED ;       
+PIN  15         RA15                                  REGISTERED ;       
+PIN  16         RA14                                  REGISTERED ;       
+PIN  18         RA12                                  COMBINATORIAL ;       
+PIN  19         /INH                                  COMBINATORIAL ;       
+PIN  23         /RCS                                  COMBINATORIAL ;       
+PIN  20         BankAB                                REGISTERED ;       
+PIN  21         ENRD                                  REGISTERED ;       
+PIN  22         ENWR                                  REGISTERED ;       
+PIN  17         PREWR                                 REGISTERED ;       
+
+;----------------------------------- Boolean Equation Segment ------
+EQUATIONS
+
+/ * + :+: for NOT, AND, OR, and EXCLUSIVE OR respectively
+
+; Registered
+GLOBAL.RSTF = RES
+
+; if A2...
+RA16 = (A2 * A3) + (/A2 * RA16)
+RA15 = (A2 * A1) + (/A2 * RA15)
+RA14 = (A2 * A0) + (/A2 * RA14)
+
+; if /A2...
+BankAB = 	( A2 * BankAB) + 
+			(/A2 * A3)
+
+ENRD =		( A2 * ENRD) + 
+			(/A2 * /A0 * /A1) + 
+			(/A2 * A0 * A1)
+
+PREWR = 	( A2 * PREWR) + 
+			(/A2 * A0)
+
+ENWR = 		( A2 * ENWR) + 
+			(/A2 * A0 * PREWR)
+
+; Combinational
+INH = 	A15 * A14 * A12 * ENRD * /WE + 
+		A15 * A14 * A13 * ENRD * /WE + 
+		A15 * A14 * A12 * ENWR *  WE + 
+		A15 * A14 * A13 * ENWR *  WE +
+		A15 * A14 * A12 * ENRD * ENWR + 
+		A15 * A14 * A13 * ENRD * ENWR
+
+RCS = 	/PHI1 * A15 * A14 * A12 * ENRD * /WE + 
+		/PHI1 * A15 * A14 * A13 * ENRD * /WE + 
+		/PHI1 * A15 * A14 * A12 * ENWR *  WE + 
+		/PHI1 * A15 * A14 * A13 * ENWR *  WE +
+		/PHI1 * A15 * A14 * A12 * ENRD * ENWR + 
+		/PHI1 * A15 * A14 * A13 * ENRD * ENWR
+
+RA12 = 	/A13 * BankAB + A13 * A12
+**/
+
+

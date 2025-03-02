@@ -1,0 +1,28 @@
+Name     RAM128-GAL22V10;
+PartNo   GAL22V10B;
+Date     27.02.2025;
+Revision 01;
+Designer JoSch;
+Company  None;
+Assembly None;
+Location None;
+Device   g22v10;
+
+/*
+* Order:  define order, polarity, and output
+* spacing of stimulus and response values
+*/
+
+ORDER: DEVSEL, A0, A1, A2, A3, RA14, RA15, RA16, DMA; 
+
+
+VECTORS:
+C0010***1
+C1010***1
+C1010***0
+C0110***0
+C0011***0
+C1100***0
+C1001***0
+C0000***0
+C0000***1
